@@ -242,23 +242,6 @@ class PHPGamification
     }
 
     /**
-     * Get badge by alias
-     * @param $descriptor
-     * @return null
-     * @throws Exception
-     */
-    private function getBadgeByAlias($descriptor)
-    {
-        $r = null;
-        foreach ($this->badges as $b) {
-            if ($descriptor == $b['alias'])
-                $r = $b['id'];
-        }
-        if (is_null($r)) throw new Exception(__METHOD__ . ': Invalid badge id. Descriptor: ' . $descriptor);
-        return $r;
-    }
-
-    /**
      * @param $id
      * @return Event
      * @throws Exception
@@ -676,6 +659,10 @@ class PHPGamification
         return true;
     }
 
+    /**
+     * @param $limit
+     * @return UserScore[]
+     */
     public function getUsersPointsRanking($limit)
     {
         $this->startEngine();
@@ -695,6 +682,4 @@ class PHPGamification
     {
         return $this->dao->getBadgeByAlias($alias);
     }
-
-
 }

@@ -5,8 +5,6 @@ PHPGamification
 
 Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification).
 
-If you want to colaborate, make a fork and do your pull requests!
-
 # Features
 
 * Quickly integrate a **full gamification engine** to your projects
@@ -72,6 +70,11 @@ $gamification->executeEvent('post_to_blog', array('YourPostId'=>11));
 /** Getting user data */
 echo "<pre>";
 var_dump($gamification->getUserAllData());
+echo "</pre>";
+
+/** Getting users ranking */
+echo "<pre>";
+var_dump($gamification->getUsersPointsRanking();
 echo "</pre>";
 ```
 
@@ -139,11 +142,12 @@ Take advantage of events callback to send emails to user user when some great ha
 
 # Todo
 
-* Allow Callbacks when your conquest a new level (move ReachCallback to badge and level?)
+If you want to colaborate, make a fork and do your pull requests!
 
+* Allow Callbacks when your conquest a new level (move ReachCallback to badge and level?)
 
 # Contact
 
 Tiago Gouvêa
 
-[Blog](http://www.tiagogouvea.com.br) [Twitter](https://twitter.com/TiagoGouvea) [Facebook](https://www.facebook.com/tiagogouvea)
+[Blog](http://www.tiagogouvea.com.br) | [Twitter](https://twitter.com/TiagoGouvea) | [Facebook](https://www.facebook.com/tiagogouvea)

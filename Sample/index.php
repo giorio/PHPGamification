@@ -116,7 +116,6 @@ if ($truncateDatabaseFull) {
  * USAGE:
  */
 
-
 // User who receives gamification events
 $gamification->setUserId(1);
 
