@@ -212,6 +212,14 @@ class PHPGamification
         return false;
     }
 
+    public function getUserAllData(){
+        return array(
+            'userScores'=>$this->getUserScores(),
+            'userBadges'=> $this->getUserBadges(),
+            'userLog'=> $this->getUserLog(),
+            'userEvents'=> $this->getUserEvents());
+    }
+
     /**
      * @param bool|false $resetAlerts
      * @return UserAlert[]

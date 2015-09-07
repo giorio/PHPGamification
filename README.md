@@ -1,11 +1,17 @@
 PHPGamification
 ===============
 
-Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification)
-
 PHPGamification are a Generic Gamification PHP Framework that clains to be simple and objective.
 
-Sample code:
+Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification)
+# Features
+
+* Handle Points, Levels and Bagdes
+* Allow use your own Callbacks when user receive Points or Badges
+* Use your own user database: call $gamification->setUserId($youtUserId) and keep going
+
+
+# Sample code
 
 ```php
 /** Instantiate **/
@@ -13,9 +19,9 @@ $gamification = new PHPGamification::getInstance();
 $gamification->setDAO(new DAO('my_host', 'my_databse', 'my_user', 'my_pass'));
 
 /** Badges definitions */
-$gamification->addBadge('newbee', 'Newbee', 'You logged in, congratulations!', 'img/badge1.png');
-$gamification->addBadge('addict', 'Addict', 'You have logged in 10 times', 'img/badge1.png');
-$gamification->addBadge('professional_writer', 'Professional Writer', 'You must write a book! 50 posts!!', 'img/badge3.png');
+$gamification->addBadge('newbee', 'Newbee', 'You logged in, congratulations!');
+$gamification->addBadge('addict', 'Addict', 'You have logged in 10 times');
+$gamification->addBadge('professional_writer', 'Professional Writer', 'You must write a book! 50 posts!!');
 
 /** Levels definitions */
 $gamification->addLevel(0, 'No Star');
@@ -55,30 +61,30 @@ $gamification->addEvent($event);
 $gamification->setUserId(1);
 $gamification->executeEvent('join_network');
 $gamification->executeEvent('login');
-   for ($i=0; $i<9; $i++)
-        $gamification->executeEvent('login');
+for ($i=0; $i<9; $i++)
+    $gamification->executeEvent('login');
 $gamification->executeEvent('post_to_blog', array('YourPostId'=>11));
 
 /** Getting user data */
 echo "<pre>";
-var_dump($gamification->getUserScores());
-var_dump($badges = $gamification->getUserBadges());
-var_dump($log = $gamification->showUserLog());
-var_dump($events = $gamification->getUserEvents());
+var_dump($gamification->getUserAllData());
 echo "</pre>";
 ```
 
-Use your own user database: call $gamification->setUserId($youtUserId) and keep going
-You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO()
+# Using
 
-= Event =
+## Setup your gamification rules
 
-Level
-Badge
-Points
+### Levels and badges
 
- Each: occurs every time a event is called
- Reach: occurs only when reachRequiredRepetitions reach the required reachRequiredRepetitions
+Just tell what levels and badges have your game.
+
+### Events
+
+A event may occur a just time or many times. When creating a event you can setup Points and Badge to be granted **each** time it occurs and/or when user **reach** the required repetitions.
+
+* Each: occurs every time a event is called
+* Reach: occurs only when reachRequiredRepetitions reach the required reachRequiredRepetitions
 
  - points:
     each event: setEachPointsGranted
@@ -87,11 +93,34 @@ Points
     each event: setEachBadgeGranted
     when reach required reachRequiredRepetitions: setReachBadgeGranted
 
- - Event
- - Badge
- - Repetition Complete
+## Running your gamification executing Events
+
+Every time you want to something happen in your gamification enviroment, you must execute a event calling:
+
+```php
+    $gamification->executeEvent('login',array('more_data'=>'to_your_callback'));
+```
+
+All information you can need about the some user can be retrieved calling getUserScores(), getUserBadges(), showUserLog() and getUserEvents(), or $gamification->getUserAllData() to return all togheter.
 
  - Repetitions
  - Callback (each, event completion) (must return true)
 
-setAllowRepetitions: force to happen just one time (1)
+
+## Keep your users engajed
+
+Take advantage of events callback to send emails to user user when some great happend, like, win a new badge or growing by the levels.
+
+# Some more
+
+ * You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO()
+
+# Todo
+
+* Allow Callbacks when your conquest a new level (Move ReachCallback to badge and level?)
+
+# Contact
+
+Tiago Gouvêa
+[Blog](http://www.tiagogouvea.com.br) [Twitter](https://twitter.com/TiagoGouvea) [Facebook](https://www.facebook.com/tiagogouvea)
+
