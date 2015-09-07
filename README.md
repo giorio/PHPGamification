@@ -1,14 +1,14 @@
 PHPGamification
 ===============
 
-PHPGamification are a Generic Gamification PHP Framework that clains to be simple and objective.
+**PHPGamification** are a **Generic Gamification PHP Framework** that clains to be simple and objective.
 
 Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification)
 # Features
 
 * Handle Points, Levels and Bagdes
-* Allow use your own Callbacks when user receive Points or Badges
-* Use your own user database: call $gamification->setUserId($youtUserId) and keep going
+* Use your own **user database**
+* Create Callbacks to use when user receive Points or Badges
 
 
 # Sample code
@@ -73,6 +73,8 @@ echo "</pre>";
 
 # Using
 
+In sample folder you can see a sample intuitive code. It must be you start point to use PHPGamification.
+
 ## Setup your gamification rules
 
 ### Levels and badges
@@ -84,27 +86,37 @@ Just tell what levels and badges have your game.
 A event may occur a just time or many times. When creating a event you can setup Points and Badge to be granted **each** time it occurs and/or when user **reach** the required repetitions.
 
 * Each: occurs every time a event is called
-* Reach: occurs only when reachRequiredRepetitions reach the required reachRequiredRepetitions
+* Reach: occurs only when user reach the required reachRequiredRepetitions
 
- - points:
-    each event: setEachPointsGranted
-    when reach required reachRequiredRepetitions: setReachBadgeGranted
- - badges
-    each event: setEachBadgeGranted
-    when reach required reachRequiredRepetitions: setReachBadgeGranted
+### Callbacks
 
-## Running your gamification executing Events
+Use callback methods to improve the user interation with your gamification system or validate if a user really need receive points/badges. The callbacks can be called in two moments:
 
-Every time you want to something happen in your gamification enviroment, you must execute a event calling:
+* Each Callback: will run every time and event are executed
+* Reach Callback: will run just when user reach the required repetions of that event
+
+When using your callback methods, remember to return **true** to the event continue, if you return **false** the event will don't grant Points nor Badges.
+It can be used to cerify some data in your business logic before giving points or badges to the user.
+
+## Running your gamification engine
+
+Start the engine setting the **User Id** that you are working with:
 
 ```php
-    $gamification->executeEvent('login',array('more_data'=>'to_your_callback'));
+$gamification->setUserId($youtUserId);
+``
+
+Every time you want to something happen in your gamification enviroment you must **execute a event** calling:
+
+```php
+$gamification->executeEvent('login',array('more_data'=>'to_your_callback'));
 ```
 
-All information you can need about the some user can be retrieved calling getUserScores(), getUserBadges(), showUserLog() and getUserEvents(), or $gamification->getUserAllData() to return all togheter.
+All information you can need about the some user can be retrieved calling getUserScores(), getUserBadges(), showUserLog() and getUserEvents(), or $gamification->getUserAllData() to return all togheter:
 
- - Repetitions
- - Callback (each, event completion) (must return true)
+```php
+var_dump($gamification->getUserScores());
+```
 
 
 ## Keep your users engajed
@@ -113,14 +125,15 @@ Take advantage of events callback to send emails to user user when some great ha
 
 # Some more
 
- * You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO()
+* You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO()
 
 # Todo
 
-* Allow Callbacks when your conquest a new level (Move ReachCallback to badge and level?)
+* Allow Callbacks when your conquest a new level (move ReachCallback to badge and level?)
+
 
 # Contact
 
 Tiago Gouvêa
-[Blog](http://www.tiagogouvea.com.br) [Twitter](https://twitter.com/TiagoGouvea) [Facebook](https://www.facebook.com/tiagogouvea)
 
+[Blog](http://www.tiagogouvea.com.br) [Twitter](https://twitter.com/TiagoGouvea) [Facebook](https://www.facebook.com/tiagogouvea)
