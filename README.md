@@ -3,13 +3,17 @@ PHPGamification
 
 **PHPGamification** are a **Generic Gamification PHP Framework** that clains to be simple and objective.
 
-Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification)
+Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification).
+
+If you want to colaborate, make a fork and do your pull requests!
+
 # Features
 
-* Handle Points, Levels and Bagdes
-* Use your own **user database**
+* Quickly integrate a **full gamification engine** to your projects
+* Handle **Points**, **Levels** and **Bagdes**
+* Access stored user **alerts** and **logs** to easy understand user scores
+* Use your own **user database** with no need to change your tables structures
 * Create Callbacks to use when user receive Points or Badges
-
 
 # Sample code
 
@@ -77,9 +81,18 @@ In sample folder you can see a sample intuitive code. It must be you start point
 
 ## Setup your gamification rules
 
+Get the PHPGamification engine to construct the object:
+
+```php
+$gamification = new PHPGamification::getInstance();
+$gamification->setDAO(new DAO('my_host', 'my_databse', 'my_user', 'my_pass'));
+```
+
+You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO();
+
 ### Levels and badges
 
-Just tell what levels and badges have your game.
+Just tell what levels and badges have your game, like in sample file.
 
 ### Events
 
@@ -88,14 +101,16 @@ A event may occur a just time or many times. When creating a event you can setup
 * Each: occurs every time a event is called
 * Reach: occurs only when user reach the required reachRequiredRepetitions
 
+* You can also use setAllowRepetitions(false) to tell the event can be called just one time by user.
+
 ### Callbacks
 
 Use callback methods to improve the user interation with your gamification system or validate if a user really need receive points/badges. The callbacks can be called in two moments:
 
 * Each Callback: will run every time and event are executed
-* Reach Callback: will run just when user reach the required repetions of that event
+* Reach Callback: will run just when user reach the required event repetions
 
-When using your callback methods, remember to return **true** to the event continue, if you return **false** the event will don't grant Points nor Badges.
+When using your callback methods, remember to return **true** to the event continue, or **false** to event don't grant Points nor adges.
 It can be used to cerify some data in your business logic before giving points or badges to the user.
 
 ## Running your gamification engine
@@ -104,7 +119,7 @@ Start the engine setting the **User Id** that you are working with:
 
 ```php
 $gamification->setUserId($youtUserId);
-``
+```
 
 Every time you want to something happen in your gamification enviroment you must **execute a event** calling:
 
@@ -118,14 +133,9 @@ All information you can need about the some user can be retrieved calling getUse
 var_dump($gamification->getUserScores());
 ```
 
-
 ## Keep your users engajed
 
 Take advantage of events callback to send emails to user user when some great happend, like, win a new badge or growing by the levels.
-
-# Some more
-
-* You can set your own DAO: implement DAOInterface and set your instance with $gamification->setDAO()
 
 # Todo
 

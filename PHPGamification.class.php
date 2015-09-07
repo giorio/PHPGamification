@@ -37,7 +37,7 @@ class PHPGamification
     /** @var int $testUserId */
     private $testUserId = null;
 
-    /** @var array $events Events definitions */
+    /** @var $events Event[] */
     private $events = array();
 
     /** @var array $events Events triggers definitions */
@@ -51,9 +51,6 @@ class PHPGamification
 
     // User id
     private $userId = null;
-
-    // Definitions counters
-    private $levelsCounter = 0;
 
     // Events queue
     private $eventsQueue = array();
@@ -78,14 +75,12 @@ class PHPGamification
 
     /**
      * Add badge to gamification database
-     * @param      $id
-     * @param      $internalDescriptor
-     * @param      $descriptor
-     * @param      $description
-     * @param      $imageURL
-     * @param null $event
-     * @return Badge
+     * @param $alias
+     * @param $title
+     * @param $description
+     * @param null $imageURL
      * @throws Exception
+     * @return Badge
      */
     public function addBadge($alias, $title, $description, $imageURL = null)
     {
@@ -112,13 +107,8 @@ class PHPGamification
     public function addLevel($points, $title, $description = null)
     {
         if (!is_numeric($points) || empty($title)) throw new Exception(__METHOD__ . ': Invalid parameters');
-
-        // Save level
         $level = $this->dao->saveLevel($points, $title, $description);
-
-        // Add level to gamification engine
         $this->levels[$level->id] = $level;
-
         return $level;
     }
 
@@ -130,15 +120,8 @@ class PHPGamification
      */
     public function addEvent(Event $event)
     {
-//        var_dump($event);
-//        echo "<br><br>";
         $event = $this->dao->saveEvent($event);
-
-//        var_dump($event);die(äaa);
-
         $alias = $event->getAlias();
-
-//        var_dump($alias);
 
         // Add new event/trigger to array events
         if (isset($this->events[$alias])) {
@@ -170,19 +153,6 @@ class PHPGamification
     }
 
     /**
-     *
-     * Add event to pending events queue
-     *
-     * @param $alias
-     *
-     */
-    private function addEventToQueue($alias)
-    {
-        $this->eventsQueue[] = $alias;
-    }
-
-
-    /**
      * Save alert for received badges
      * @param $id
      * @return bool
@@ -201,15 +171,6 @@ class PHPGamification
     {
         // Save alert
         return $this->dao->saveLevelAlert($this->getUserId(), $id);
-    }
-
-    private function badgeExists($descriptor)
-    {
-        foreach ($this->badges as $b) {
-            if ($descriptor == $b['internal']) return true;
-        }
-
-        return false;
     }
 
     public function getUserAllData(){
@@ -265,7 +226,6 @@ class PHPGamification
                     'triggers' => $triggers
                 );
             }
-
         return $return;
     }
 
@@ -278,26 +238,23 @@ class PHPGamification
     public function getBadge($id)
     {
         if (!isset($this->badges[$id])) throw new Exception(__METHOD__ . ': Invalid badge id: '.$id);
-
         return $this->badges[$id];
     }
 
     /**
-     * Get badge id
+     * Get badge by alias
      * @param $descriptor
      * @return null
      * @throws Exception
      */
-    private function getBadgeId($descriptor)
+    private function getBadgeByAlias($descriptor)
     {
         $r = null;
-
         foreach ($this->badges as $b) {
-            if ($descriptor == $b['internal']) $r = $b['id'];
+            if ($descriptor == $b['alias'])
+                $r = $b['id'];
         }
-
         if (is_null($r)) throw new Exception(__METHOD__ . ': Invalid badge id. Descriptor: ' . $descriptor);
-
         return $r;
     }
 
@@ -311,7 +268,6 @@ class PHPGamification
         foreach ($this->events as $event) {
             if ($id == $event->getId()) return $event;
         }
-
         throw new Exception(__METHOD__ . ': Invalid event id');
     }
 
@@ -328,7 +284,6 @@ class PHPGamification
 
     /**
      * Get last level id
-     * @param $id
      * @return array
      */
     public function getLastLevelId()
@@ -344,7 +299,6 @@ class PHPGamification
     public function getUserLog()
     {
         if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
-
         return $this->dao->getUserLog($this->getUserId());
     }
 
@@ -356,7 +310,6 @@ class PHPGamification
     public function getUserBadges()
     {
         if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
-
         return $this->dao->getUserBadges($this->getUserId());
     }
 
@@ -401,7 +354,6 @@ class PHPGamification
     public function getUserId()
     {
         if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
-
         return $this->userId;
     }
 
@@ -409,8 +361,9 @@ class PHPGamification
      * Execute gamification event
      * @param      $alias
      * @param null $additional Additional parameters to use when calling the callbacks
-     * @return bool
+     * @param null $eventDate
      * @throws Exception
+     * @return bool
      */
     public function executeEvent($alias, $additional = null, $eventDate = null)
     {
@@ -553,9 +506,6 @@ class PHPGamification
             }
         }
 
-        // Process events queue
-        $this->processEventsQueue($additional);
-
         return true;
     }
 
@@ -564,12 +514,12 @@ class PHPGamification
      * Grant badge to user
      * @param Badge $badge
      * @param null $eventId
-     * @return bool
+     * @param null $eventDate
      * @throws Exception
+     * @return bool
      * @internal param $alias
      */
-    public
-    function grantBadge(Badge $badge, $eventId = null, $eventDate = null)
+    public function grantBadge(Badge $badge, $eventId = null, $eventDate = null)
     {
         if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
 
@@ -593,8 +543,9 @@ class PHPGamification
      * Grant level to user
      * @param      $levelId
      * @param null $eventId
-     * @return bool
+     * @param null $eventDate
      * @throws Exception
+     * @return bool
      */
     private function grantLevel($levelId, $eventId = null, $eventDate = null)
     {
@@ -611,11 +562,6 @@ class PHPGamification
         // Gamification alert
         $this->alertLevel($levelId);
 
-        // Add event to queue when the user reach this level
-//        $level = $this->getLevel($levelId);
-//        if (!is_null($level['event']))
-//            $this->addEventToQueue($level['event']);
-
         return true;
     }
 
@@ -627,43 +573,29 @@ class PHPGamification
      * @param null $eventDate
      * @throws Exception
      */
-    public
-    function grantPoints($points, $eventId = null, $eventDate = null)
+    public function grantPoints($points, $eventId = null, $eventDate = null)
     {
         // Get user level/points
         $score = $this->dao->getUserScore($this->getUserId());
 
         $userPoints = $score->getPoints();
-
         // Add points to user counter
         $this->dao->grantPointsToUser($this->getUserId(), $points);
-
         // Log event
         $this->dao->logUserEvent($this->getUserId(), $eventId, $points, null, null, $eventDate);
-
         // Updated points for levels comparison
         $userPoints += $points;
-//        var_dump($userPoints);
-
         // Check levels higher than user level
         $nextLevel = $this->dao->getNextLevel($score->getIdLevel(), $score->getPoints());
-//        var_Dump($nextLevel);
         if ($nextLevel) {
-//            echo "<h1>next level</h1>";
-
-//            echo "<h2>UserPoints:$userPoints - NexLevelPoints: ".$nextLevel->getPoints()."</h2>";
             // Check if user reaches next level
             if ($userPoints >= $nextLevel->getPoints()) {
-//                echo ("<h1>grant level</h1>");
-//                echo ("<h1>grant level</h1>");
-//                echo ("<h1>grant level</h1>");
                 $this->grantLevel($nextLevel->getId(), $eventId, $eventDate);
             }
         }
     }
 
-    public
-    function pointsToNextLevel()
+    public function pointsToNextLevel()
     {
         $scores = $this->getUserScores();
 
@@ -678,152 +610,11 @@ class PHPGamification
         return $r;
     }
 
-    public
-    function prepareAlertsSection($return = false)
-    {
-        if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
-
-        $r = '';
-
-        $alerts = $this->getUserAlerts(true);
-
-        if (!empty($alerts)) {
-            $levelId = 0;
-            $levelLabel = '';
-            $badges = array();
-
-            foreach ($alerts as $a) {
-                // Get alert for new level
-                if (!is_null($a['idLevel'])) {
-                    if ($a['idLevel'] > $levelId) {
-                        $level = $this->getLevel($a['idLevel']);
-                        $levelId = $a['idLevel'];
-                        $levelLabel = $level['alias'];
-                    }
-                }
-
-                // Get alert for new badge
-                if (!is_null($a['idBadge'])) {
-                    $badges[] = $a['idBadge'];
-                }
-            }
-
-            $gamifCongratsBodyLevel = '';
-            if ($levelId) {
-                $gamifCongratsBodyLevel = <<<LEVEL
-<p>Has alcanzado el nivel:</p>
-<p id="gengamif-level-number">$levelId</p>
-<p id="gengamif-level-label">$levelLabel</p>
-LEVEL;
-            }
-
-            $gamifCongratsBodyBadges = '';
-            if (!empty($badges)) {
-                foreach ($badges as $b) {
-                    $badge = $this->getBadge($b);
-
-                    $gamifCongratsBodyBadges .= '<div class="gengamif-badge"><img src="' . $badge['imageurl'] . '" title="' . htmlspecialchars($badge['alias']) . ' - ' . htmlspecialchars($badge['description']) . '"><br />' . htmlspecialchars($badge['alias']) . '<br />' . htmlspecialchars($badge['description']) . '</div>';
-                }
-
-                $gamifCongratsBodyBadges = '<p>Has obtenido las siguientes medallas:</p><div id="gengamif-badgeslist">' . $gamifCongratsBodyBadges . '</div>';
-            }
-
-            $pointsLeft = $this->pointsToNextLevel();
-            $pointsLeftStr = '';
-            if (!is_null($pointsLeft)) $pointsLeftStr = '<p>Te faltan ' . $pointsLeft . ' puntos para alcanzar el próximo nivel, ¡ánimo!</p>';
-
-            $r = <<<LEVEL
-<section id="gengamif-alerts">
-<section id="gengamif-alerts-inner">
-<h3>¡Enhorabuena!</h3>
-$gamifCongratsBodyLevel
-$gamifCongratsBodyBadges
-<section id="gengamif-alerts-footer">
-$pointsLeftStr
-</section>
-</section>
-</section>
-LEVEL;
-
-        }
-
-        if ($return) return $r;
-
-        echo $r;
-        return true;
-    }
-
-    public
-    function printBadges()
-    {
-        if (is_null($this->userId)) throw new Exception(__METHOD__ . ': User id must be set before start game engine');
-
-        $r = '';
-
-        foreach ($this->getUserBadges() as $m) {
-            $r .= '<img src="' . $m['imageurl'] . '" title="' . htmlspecialchars($m['alias']) . ' - ' . htmlspecialchars($m['description']) . '">';
-        }
-
-        if (!empty($r)) $r = '<section class="gengamif-badges-images">' . $r . '</section>';
-
-        return $r;
-    }
-
-    public
-    function printProgressBar($return = false)
-    {
-        if (is_null($this->userId)) {
-            $level = $this->getLevel(1);
-            $_ = array(
-                'points' => 0,
-                'progress' => 0,
-                'idLevel' => 1,
-                'levelname' => $level['alias']
-            );
-        } else {
-            $_ = $this->getUserScores();
-        }
-
-        $puntos = $_['points'] . ' ' . T_('puntos');
-        $progreso = $_['progress'];
-        $nivel = T_('Nivel: ') . ' ' . $_['idLevel'];
-        $nombreNivel = $_['levelname'];
-
-        $r = <<<EOF
-<div class="gamif-info" style="margin: 10px 0;">
-<div class="gamif-progressbar-points" style="padding-left: 5px;font-size: 13px; text-align: center;">$puntos</div>
-<div class="gamif-progressbar" style="border: 1px solid #ddd;height: 10px;overflow: hidden;">
-<div class="gamif-progressbar-fill" style="width: $progreso%;height: 10px;background-color: #26AF61;"></div>
-</div>
-<div class="gamif-progressbar-level" style="font-size: 13px; text-align: center;width: 100%;white-space:nowrap;overflow: hidden; text-overflow: ellipsis"><a title="$nivel" href="config.php?m=progress">$nombreNivel</a></div>
-</div>
-EOF;
-
-        if ($return) return $r;
-
-        echo $r;
-        return true;
-    }
-
-    /**
-     * @param null $data
-     * Execute next event of the events queue
-     */
-    private
-    function processEventsQueue($data = null)
-    {
-        if (!empty($this->eventsQueue)) {
-            $eventDescriptor = array_shift($this->eventsQueue);
-            $this->executeEvent($eventDescriptor, $data);
-        }
-    }
-
     /**
      * Set Data Access Object
      * @param $dao
      */
-    public
-    function setDAO($dao)
+    public function setDAO($dao)
     {
         $this->dao = $dao;
     }
@@ -832,8 +623,7 @@ EOF;
      * Enable/disable executeEvent() globally
      * @param bool $enabled
      */
-    public
-    function setEnabled($enabled = true)
+    public function setEnabled($enabled = true)
     {
         $this->letsGoParty = $enabled;
     }
@@ -844,8 +634,7 @@ EOF;
      * @return bool
      * @throws Exception
      */
-    public
-    function setUserId($userId)
+    public function setUserId($userId)
     {
         if ($this->engineStarted == false)
             $this->startEngine();
@@ -878,8 +667,7 @@ EOF;
      * @return bool
      * @throws Exception
      */
-    public
-    function setTestUserId($userId)
+    public function setTestUserId($userId)
     {
         if (!is_numeric($userId)) throw new Exception(__METHOD__ . ': Invalid parameters');
 
@@ -888,15 +676,13 @@ EOF;
         return true;
     }
 
-    public
-    function getUsersPointsRanking($limit)
+    public function getUsersPointsRanking($limit)
     {
         $this->startEngine();
         return $this->dao->getUsersPointsRanking($limit);
     }
 
-    public
-    function truncateDatabase($truncateLevelBadge = false)
+    public function truncateDatabase($truncateLevelBadge = false)
     {
         return $this->dao->truncateDatabase($truncateLevelBadge);
     }
@@ -905,8 +691,7 @@ EOF;
      * @param $alias
      * @return Badge
      */
-    public
-    function getBadgeByAlias($alias)
+    public function getBadgeByAlias($alias)
     {
         return $this->dao->getBadgeByAlias($alias);
     }
