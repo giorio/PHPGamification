@@ -78,6 +78,24 @@ var_dump($gamification->getUsersPointsRanking();
 echo "</pre>";
 ```
 
+
+# Installing
+
+Clone, download or just add to your composer.json file:
+```json
+{
+    "require": {
+        "tiagogouvea/phpgamification": "*"
+    }
+}
+```
+
+Or call:
+
+```shell
+composer require tiagogouvea/phpgamification
+```
+
 # Using
 
 In sample folder you can see a sample intuitive code. It must be you start point to use PHPGamification.
