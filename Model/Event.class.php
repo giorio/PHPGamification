@@ -24,8 +24,8 @@ class Event extends Entity
     protected $idReachBadge = null;       /* Badge granted when triggers */
     protected $eachPoints = null;         /* Points granted every time event called */
     protected $reachPoints = null;        /* Points granted when reachRequiredRepetitions are reached */
-    protected $eachCagetAllowRepetitionsllback = null;       /* Each callback function */
-    protected $reachCallback = null;      /* Trigger callback function */
+    protected $eachCallback = null;
+    protected $reachCallback = null;
 
     function __construct($stdClass = null)
     {
