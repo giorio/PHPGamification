@@ -121,7 +121,7 @@ It can be used to cerify some data in your business logic before giving points o
 Start the engine setting the **User Id** that you are working with:
 
 ```php
-$gamification->setUserId($youtUserId);
+$gamification->setUserId($yourUserId);
 ```
 
 Every time you want to something happen in your gamification enviroment you must **execute a event** calling:
@@ -145,6 +145,8 @@ Take advantage of events callback to send emails to user user when some great ha
 If you want to colaborate, make a fork and do your pull requests!
 
 * Allow Callbacks when your conquest a new level (move ReachCallback to badge and level?)
+* Fix autoload to work just with composer
+* Create a iframe call to people show their points and badges on their blogs
 
 # Contact
 
