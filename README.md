@@ -1,7 +1,7 @@
 PHPGamification
 ===============
 
-**PHPGamification** are a **Generic Gamification PHP Framework** that clains to be simple and objective.
+**PHPGamification** is a **Generic Gamification PHP Framework** that claims to be simple and objective.
 
 Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamification).
 
@@ -11,7 +11,7 @@ Forked from [jfuentesa/gamification](https://github.com/jfuentesa/gengamificatio
 * Handle **Points**, **Levels** and **Bagdes**
 * Access stored user **alerts** and **logs** to easy understand user scores
 * Use your own **user database** with no need to change your tables structures
-* Create Callbacks to use when user receive Points or Badges
+* Create Callbacks to use when user receives Points or Badges
 
 # Sample code
 
@@ -98,7 +98,7 @@ composer require tiagogouvea/phpgamification
 
 # Using
 
-In sample folder you can see a sample intuitive code. It must be you start point to use PHPGamification.
+In /sample/ folder you can see a simple intuitive code. It must be you start point to use PHPGamification.
 
 ## Setup your gamification rules
 
