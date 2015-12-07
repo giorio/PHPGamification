@@ -14,11 +14,5 @@
             "email": "tiago@tiagogouvea.com.br",
             "homepage": "http://www.tiagogouvea.com.br/"
         }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/tiagogouvea/phpgamification"
-        }
     ]
 }
