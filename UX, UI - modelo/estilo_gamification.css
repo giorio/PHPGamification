@@ -1,0 +1,11 @@
+/*Estilo geral <body>*/
+
+body {
+	background: url("backgroud.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+};
+
+input {
+
+};
