@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>TI Gamification</title>
-	<link rel="stylesheet" type="text/css" href="estilo_gamification.css">
+        <link rel="stylesheet" type="text/css" href="_css/estilo_gamification.css">
 </head>
 <body>
 	<div id="pagina_pontuacao">
@@ -15,16 +15,23 @@
 		</nav>
 	</div>
 	<div>
-		<form>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Participante</th>
+                    <th>Pontos</th>
+                    <th>Nível</th>
+                </tr>
+                
 		<?php
 			/*Pega o último id de usário ou faz a contagem de registro e coloca o total na variavel*/
-			$user = $_GET[""];
+			$user = 10;
 			/*Gera as linhas para nome e pontuação de forma dinamica, ambos os campos não tem permissão de edição*/
-			for ($i = 0; $i > $user ; $i++) { 
-				print "<input type="text" name="nome$i" readonly><input type="number" name="pontos$i" readonly>"
+			for ($i = 0; $i < $user ; $i++) { 
+				print "<tr><td><b>$i<b/></td><td>Nome do jogador com link para um perfil</td><td>Pontuação total</td><td>Rank</td></tr>";
 			}
 		?>
-		</form>
+            </table>
 	</div>
 </body>
 </html>
