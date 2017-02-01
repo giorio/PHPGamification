@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+/*Para cominçao de cores foi usado a harmonia de cores "Tríade" ou "Triádicas".
+cor princial RGB(69,227,228),
+cores secundária: RGB(31,151,151); RGB(232,94,194); RGB(177,155,36); RGB(151,134,38)
+extraido do site: https://color.adobe.com/pt/create/color-wheel*/
+
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
+/*Estilo para o menu Nav*/
+
+h1 {
+    font-family: 'Lobster', cursive;
+    font-weight:  bolder;
+    text-shadow: -3px 2px 2px black;
+    color: rgba(177,155,36,1);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+}
+
+div#menu{
+    width: 450px;
+    margin: auto;
+}
+
+.botao {
+    background-color: rgba(177,155,36,1);
+    border: none;
+    color: white;
+    padding: 10px 21px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+}
+
+/*Estilo geral <body>*/
+
+body {
+    background: url("../_imagens/backgroud.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*Estilo para tabela do rank*/
+
+table#rank {
+    margin: auto;
+    border: 2px solid black;
+    background-color: rgba(255,255,255,.6);
+}
+
+table#rank td {
+    border-top: 2px solid gray;
+}
+
+table#rank tr:hover {
+    background-color: rgba(31,151,151,.4)
+}
+
+/*rodape*/
+
+footer {
+    width: 450px;
+    margin: auto;
+}
+
+span.rodape {
+    font-weight: bold;
+    font-family: arial, sans-serif;
+    color: rgba(255,255,255,1);
+}
+
+table#rodape {
+    width: 450px;
+}
+
+td.lateral{
+    width: 20%;
+}
+
+td.central {
+    width: 60%;
+}
+
+img.rodape {
+    width: 100%;
+    height: 30%;
+}
