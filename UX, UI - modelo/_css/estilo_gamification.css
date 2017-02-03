@@ -7,12 +7,12 @@ extraido do site: https://color.adobe.com/pt/create/color-wheel*/
 
 @import url('https://fonts.googleapis.com/css?family=Lobster');
 
-/*Estilo para o menu Nav*/
+/*Estilo para o menu Nav de ambas as paginas*/
 
 h1 {
     font-family: 'Lobster', cursive;
     font-weight:  bolder;
-    text-shadow: -3px 2px 2px black;
+    text-shadow: -3px 3px 1px black;
     color: rgba(177,155,36,1);
     text-transform: uppercase;
     letter-spacing: 0.3em;
@@ -24,7 +24,7 @@ div#menu{
 }
 
 .botao {
-    background-color: rgba(177,155,36,1);
+    background-color: rgba(177,155,36,.8);
     border: none;
     color: white;
     padding: 10px 21px;
@@ -33,20 +33,19 @@ div#menu{
     font-size: 16px;
 }
 
-/*Estilo geral <body>*/
+/*Estilo geral <body> ambas as paginas*/
 
 body {
-    background: url("../_imagens/backgroud.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: rgba(69,227,228,.6);
 }
 
 /*Estilo para tabela do rank*/
 
 table#rank {
+    width: 450px;
     margin: auto;
     border: 2px solid black;
-    background-color: rgba(255,255,255,.6);
+    background-color: rgba(255,255,255,.3);
 }
 
 table#rank td {
@@ -54,20 +53,32 @@ table#rank td {
 }
 
 table#rank tr:hover {
-    background-color: rgba(31,151,151,.4)
+    background-color: rgba(31,151,151,.6)
 }
 
-/*rodape*/
+/*estilo da pagina myAvatar*/
+
+table#avatar {
+    margin: auto;
+    border: 2px solid white;
+}
+
+table#avatar td {
+    border: 2px solid white;
+}
+
+/*rodape para ambas paginas*/
 
 footer {
     width: 450px;
     margin: auto;
+    visibility: hidden;
 }
 
 span.rodape {
     font-weight: bold;
     font-family: arial, sans-serif;
-    color: rgba(255,255,255,1);
+    color: rgba(232,94,194,1);
 }
 
 table#rodape {

@@ -11,7 +11,7 @@
             <h1>Gamification</h1>		
 	<nav>
             <span id="rank_geral" class="botao"><a href="index.php">Rank Geral</a></span>
-            <span id="myAvatar" class="botao"><a href="">Seu Avatar e feitos</a></span>
+            <span id="myAvatar" class="botao"><a href="myAvatar.php">Seu Avatar e feitos</a></span>
 	</nav>
         </header>
     </div>
@@ -26,10 +26,10 @@
                 
             <?php
                 /*Pega o último id de usário ou faz a contagem de registro e coloca o total na variavel*/
-                $user = 25;
+                $user = 20;
                 /*Gera as linhas para nome e pontuação de forma dinamica, ambos os campos não tem permissão de edição*/
 		for ($i = 1; $i <= $user ; $i++) { 
-		print "<tr><td><b>$i<b/></td><td>Nome do jogador com link para um perfil</td><td>Pontuação total</td><td>Rank</td></tr>";
+		print "<tr><td><b>$i<b/></td><td><a href='myAvatar.php'>Nome do jogador</a></td><td>Pontuação total</td><td>Rank</td></tr>";
 		}
             ?>
         </table>
